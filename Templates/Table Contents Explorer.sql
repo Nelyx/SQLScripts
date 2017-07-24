@@ -8,8 +8,8 @@ declare @command nvarchar(max)
 insert into @tablecommands
 
 select 
-'select top 10 '''+ t.name +''' as TableName , * from ' + t.name + ' were ' + c.name + ' = ' + @ID
-
+'select top 10 '''+ t.name +''' as TableName , * from ' + t.name + ' where ' + c.name + ' = ' + @ID
+,0
  from 
 sys.tables t 
 join 
