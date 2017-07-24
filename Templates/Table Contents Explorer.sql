@@ -7,15 +7,22 @@ declare @command nvarchar(max)
 
 insert into @tablecommands
 
-select 
-'select top 10 '''+ t.name +''' as TableName , * from ' + t.name + ' where ' + c.name + ' = ' + @ID
-,0
- from 
-sys.tables t 
-join 
-sys.columns c
-on t.object_id = c.object_id
-where c.name = @ColumnName
+select
+'
+if (select count(*) from '+[s].[name]+'.'+[t].[name]+' where '+[c].[name]+' = '+@ID+') > 0  
+begin
+select top 5 '''+[s].[name]+'.'+[t].[name]+''' as TableName , * from '+[s].[name]+'.'+[t].[name]+' where '+[c].[name]+' = '+@ID+'
+end',
+0
+from sys.schemas as s
+join sys.tables as t
+     on s.schema_id = t.schema_id
+join sys.columns as c
+     on t.object_id = c.object_id
+where [c].[name] = @ColumnName
+ order by
+          [s].[name],
+          [t].[name];
 
 
 
