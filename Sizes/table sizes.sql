@@ -1,5 +1,6 @@
 select
-	s.name +'.' +t.Name as ObjectName,	  		
+	s.name +'.' +t.Name as ObjectName,
+	i.name as IndexName,	  		
 	p.rows as RowCounts,
 	sum(a.total_pages) * 8 / 1024 as TotalMB,
 	sum(a.used_pages) * 8 / 1024 as UsedMB,
@@ -17,7 +18,8 @@ from sys.tables as t
 
 group by
          t.Name,
+		 i.name,
 		 s.name,
          p.Rows
 order by
-         totalmb asc;
+         totalmb desc;
